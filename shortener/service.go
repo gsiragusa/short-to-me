@@ -26,7 +26,7 @@ func NewService(le *logrus.Logger, config *config.AppConfig, store Store) Servic
 }
 
 var (
-	errorNotFound = errors.NewErrorNotFound()
+	errorNotFound       = errors.NewErrorNotFound()
 	internalServerError = errors.NewInternalServerError()
 )
 

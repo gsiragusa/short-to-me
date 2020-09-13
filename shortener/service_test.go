@@ -99,6 +99,6 @@ func TestService_IncrementRedirect(t *testing.T) {
 	store.EXPECT().IncrementCount(ctx, shortId).Return(expected, nil)
 
 	res, err := svc.IncrementRedirect(ctx, shortId)
-	require.Nil(t,err)
+	require.Nil(t, err)
 	require.Equal(t, testUrl, res)
 }

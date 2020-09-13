@@ -18,9 +18,9 @@ import (
 )
 
 const (
-	testUrl = "http://www.test.com"
+	testUrl  = "http://www.test.com"
 	shortUrl = "http://www.short.me/RMAp1Vz"
-	shortId = "RMAp1Vz"
+	shortId  = "RMAp1Vz"
 )
 
 func MakeTestApi(t *testing.T) (*API, *shortener.MockService) {
@@ -40,7 +40,7 @@ func MakeTestApi(t *testing.T) (*API, *shortener.MockService) {
 func TestAPI_CreateShortUrl(t *testing.T) {
 	api, svc := MakeTestApi(t)
 
-	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/shortener?url=%s", testUrl), nil)
+	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api?url=%s", testUrl), nil)
 
 	svc.EXPECT().ShortenUrl(req.Context(), testUrl).Return("123", nil)
 
@@ -62,7 +62,7 @@ func TestAPI_CreateShortUrl(t *testing.T) {
 func TestAPI_ReadShortUrl(t *testing.T) {
 	api, svc := MakeTestApi(t)
 
-	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/shortener?url=%s", shortUrl), nil)
+	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api?url=%s", shortUrl), nil)
 
 	svc.EXPECT().RetrieveUrl(req.Context(), shortUrl).Return(shortId, nil)
 
@@ -83,7 +83,7 @@ func TestAPI_ReadShortUrl(t *testing.T) {
 func TestAPI_DeleteShortUrl(t *testing.T) {
 	api, svc := MakeTestApi(t)
 
-	req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/api/shortener?url=%s", shortUrl), nil)
+	req := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("/api?url=%s", shortUrl), nil)
 
 	svc.EXPECT().DeleteUrl(req.Context(), shortUrl)
 
@@ -133,7 +133,7 @@ func TestAPI_Redirect(t *testing.T) {
 func TestAPI_BadRequest(t *testing.T) {
 	api, _ := MakeTestApi(t)
 
-	req:= httptest.NewRequest(http.MethodPost, "/api/shortener?url=", nil)
+	req := httptest.NewRequest(http.MethodPost, "/api?url=", nil)
 
 	resp := httptest.NewRecorder()
 	_ = api.createShortUrl(resp, req)

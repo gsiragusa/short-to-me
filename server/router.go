@@ -35,13 +35,21 @@ func NewRouter(routeConfigArr ...[]RouteConfig) *Router {
 		MuxRouter: mux.NewRouter().StrictSlash(true),
 	}
 
+	// all handlers
 	for _, routeConfigs := range routeConfigArr {
 		for _, routeConfig := range routeConfigs {
 			r.addHandler(routeConfig)
 		}
 	}
 
+	// not found handler
 	r.MuxRouter.NotFoundHandler = r.notFoundHandler()
+
+	// public documentation
+	r.MuxRouter.PathPrefix("/docs/").Handler(
+		http.StripPrefix("/docs/",
+			http.FileServer(http.Dir("public_docs/"))))
+
 	return r
 }
 

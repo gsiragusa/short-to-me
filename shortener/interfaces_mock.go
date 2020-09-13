@@ -5,9 +5,10 @@ package shortener
 
 import (
 	context "context"
+	reflect "reflect"
+
 	gomock "github.com/golang/mock/gomock"
 	errors "github.com/gsiragusa/short-to-me/errors"
-	reflect "reflect"
 )
 
 // MockService is a mock of Service interface
