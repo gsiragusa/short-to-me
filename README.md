@@ -49,6 +49,8 @@ Use [Postman](https://www.postman.com/) or `curl` to:
 Sample response
 ```
 {
+    "status": "ok",
+    "operation": "create",
     "url": "http://localhost:8081/pRA4OEy"
 }
 ```
@@ -59,6 +61,8 @@ Sample response
 Sample response
 ```
 {
+    "status": "ok",
+    "operation": "read",
     "url":"http://www.google.com"
 }
 ```
@@ -69,7 +73,9 @@ Sample response
 Sample response
 ```
 {
-    "result": "ok"
+    "status": "ok",
+    "operation": "delete",
+    "url": "http://localhost:8081/pRA4OEy"
 }
 ```
 
@@ -78,7 +84,11 @@ Sample response
 
 Sample response
 ```
-1
+{
+    "status": "ok",
+    "operation": "count",
+    "count": 4
+}
 ```
 
 #### Redirect

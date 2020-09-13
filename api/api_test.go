@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"strconv"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -42,7 +41,7 @@ func TestAPI_CreateShortUrl(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api?url=%s", testUrl), nil)
 
-	svc.EXPECT().ShortenUrl(req.Context(), testUrl).Return("123", nil)
+	svc.EXPECT().ShortenUrl(req.Context(), testUrl).Return(shortId, nil)
 
 	resp := httptest.NewRecorder()
 	if err := api.createShortUrl(resp, req); err != nil {
@@ -52,11 +51,13 @@ func TestAPI_CreateShortUrl(t *testing.T) {
 	verifyStatus(t, http.StatusOK, resp.Code)
 
 	decoder := json.NewDecoder(resp.Body)
-	var payload shortener.ModelShorten
+	var payload ResponseApi
 	require.NoError(t, decoder.Decode(&payload))
 
 	// example.com is the host used for testing
-	require.Equal(t, "http://example.com/123", payload.Url)
+	require.Equal(t, "ok", payload.Status)
+	require.Equal(t, fmt.Sprintf("http://example.com/%s", shortId), payload.Url)
+	require.Equal(t, "create", payload.Operation)
 }
 
 func TestAPI_ReadShortUrl(t *testing.T) {
@@ -74,9 +75,11 @@ func TestAPI_ReadShortUrl(t *testing.T) {
 	verifyStatus(t, http.StatusOK, resp.Code)
 
 	decoder := json.NewDecoder(resp.Body)
-	var payload shortener.ModelShorten
+	var payload ResponseApi
 	require.NoError(t, decoder.Decode(&payload))
 
+	require.Equal(t, "ok", payload.Status)
+	require.Equal(t, "read", payload.Operation)
 	require.Equal(t, shortId, payload.Url)
 }
 
@@ -93,6 +96,14 @@ func TestAPI_DeleteShortUrl(t *testing.T) {
 	}
 
 	verifyStatus(t, http.StatusOK, resp.Code)
+
+	decoder := json.NewDecoder(resp.Body)
+	var payload ResponseApi
+	require.NoError(t, decoder.Decode(&payload))
+
+	require.Equal(t, "ok", payload.Status)
+	require.Equal(t, "delete", payload.Operation)
+	require.Equal(t, shortUrl, payload.Url)
 }
 
 func TestAPI_CountRedirects(t *testing.T) {
@@ -109,9 +120,13 @@ func TestAPI_CountRedirects(t *testing.T) {
 
 	verifyStatus(t, http.StatusOK, resp.Code)
 
-	count, err := strconv.Atoi(resp.Body.String())
-	require.NoError(t, err)
-	require.Equal(t, 2, count)
+	decoder := json.NewDecoder(resp.Body)
+	var payload ResponseCount
+	require.NoError(t, decoder.Decode(&payload))
+
+	require.Equal(t, "ok", payload.Status)
+	require.Equal(t, "count", payload.Operation)
+	require.Equal(t, int64(2), payload.Count)
 }
 
 func TestAPI_Redirect(t *testing.T) {

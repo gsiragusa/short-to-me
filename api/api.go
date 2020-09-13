@@ -85,6 +85,12 @@ func (api *API) createShortUrl(w http.ResponseWriter, r *http.Request) error {
 	//     schema:
 	//       type: object
 	//       properties:
+	//         status:
+	//           type: string
+	//           example: "ok"
+	//         operation:
+	//           type: string
+	//           example: "create"
 	//         url:
 	//           type: string
 	//           example: "http://www.example.com/RMAp1Vz"
@@ -107,7 +113,12 @@ func (api *API) createShortUrl(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	shortUrl := fmt.Sprintf("http://%s/%s", r.Host, encoded)
-	return server.Write(w, http.StatusOK, &shortener.ModelShorten{Url: shortUrl})
+	resp := &ResponseApi{
+		Status:    "ok",
+		Operation: "create",
+		Url:       shortUrl,
+	}
+	return server.Write(w, http.StatusOK, resp)
 }
 
 func (api *API) readShortUrl(w http.ResponseWriter, r *http.Request) error {
@@ -131,6 +142,12 @@ func (api *API) readShortUrl(w http.ResponseWriter, r *http.Request) error {
 	//     schema:
 	//       type: object
 	//       properties:
+	//         status:
+	//           type: string
+	//           example: "ok"
+	//         operation:
+	//           type: string
+	//           example: "read"
 	//         url:
 	//           type: string
 	//           example: "https://www.google.com"
@@ -152,7 +169,12 @@ func (api *API) readShortUrl(w http.ResponseWriter, r *http.Request) error {
 		return server.WriteError(w, errors.NewErrorNotFound())
 	}
 
-	return server.Write(w, http.StatusOK, &shortener.ModelShorten{Url: res})
+	resp := &ResponseApi{
+		Status:    "ok",
+		Operation: "read",
+		Url:       res,
+	}
+	return server.Write(w, http.StatusOK, resp)
 }
 
 func (api *API) deleteShortUrl(w http.ResponseWriter, r *http.Request) error {
@@ -176,9 +198,15 @@ func (api *API) deleteShortUrl(w http.ResponseWriter, r *http.Request) error {
 	//     schema:
 	//       type: object
 	//       properties:
-	//         result:
+	//         status:
 	//           type: string
 	//           example: "ok"
+	//         operation:
+	//           type: string
+	//           example: "delete"
+	//         url:
+	//           type: string
+	//           example: "http://www.example.com/RMAp1Vz"
 	//   '400':
 	//     description: Not Found
 	//   '404':
@@ -197,7 +225,12 @@ func (api *API) deleteShortUrl(w http.ResponseWriter, r *http.Request) error {
 		return server.WriteError(w, errors.NewErrorNotFound())
 	}
 
-	return server.Write(w, http.StatusOK, &shortener.Operation{Result: "ok"})
+	resp := &ResponseApi{
+		Status:    "ok",
+		Operation: "delete",
+		Url:       url,
+	}
+	return server.Write(w, http.StatusOK, resp)
 }
 
 func (api *API) countRedirects(w http.ResponseWriter, r *http.Request) error {
@@ -219,8 +252,17 @@ func (api *API) countRedirects(w http.ResponseWriter, r *http.Request) error {
 	//   '200':
 	//     description: "Total count"
 	//     schema:
-	//       type: integer
-	//       format: int64
+	//       type: object
+	//       properties:
+	//         status:
+	//           type: string
+	//           example: "ok"
+	//         operation:
+	//           type: string
+	//           example: "count"
+	//         url:
+	//           type: integer
+	//           example: 2
 	//   '400':
 	//     description: Not Found
 	//   '404':
@@ -239,7 +281,12 @@ func (api *API) countRedirects(w http.ResponseWriter, r *http.Request) error {
 		return server.WriteError(w, errors.NewErrorNotFound())
 	}
 
-	return server.Write(w, http.StatusOK, res)
+	resp := &ResponseCount{
+		Status:    "ok",
+		Operation: "count",
+		Count:     res,
+	}
+	return server.Write(w, http.StatusOK, resp)
 }
 
 func (api *API) redirect(w http.ResponseWriter, r *http.Request) error {

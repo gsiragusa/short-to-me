@@ -52,6 +52,14 @@
             "schema": {
               "type": "object",
               "properties": {
+                "operation": {
+                  "type": "string",
+                  "example": "read"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "ok"
+                },
                 "url": {
                   "type": "string",
                   "example": "https://www.google.com"
@@ -95,6 +103,14 @@
             "schema": {
               "type": "object",
               "properties": {
+                "operation": {
+                  "type": "string",
+                  "example": "create"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "ok"
+                },
                 "url": {
                   "type": "string",
                   "example": "http://www.example.com/RMAp1Vz"
@@ -138,9 +154,17 @@
             "schema": {
               "type": "object",
               "properties": {
-                "result": {
+                "operation": {
+                  "type": "string",
+                  "example": "delete"
+                },
+                "status": {
                   "type": "string",
                   "example": "ok"
+                },
+                "url": {
+                  "type": "string",
+                  "example": "http://www.example.com/RMAp1Vz"
                 }
               }
             }
@@ -181,8 +205,21 @@
           "200": {
             "description": "Total count",
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "object",
+              "properties": {
+                "operation": {
+                  "type": "string",
+                  "example": "count"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "ok"
+                },
+                "url": {
+                  "type": "integer",
+                  "example": 2
+                }
+              }
             }
           },
           "400": {

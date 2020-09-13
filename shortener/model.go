@@ -5,7 +5,3 @@ type ModelShorten struct {
 	Url   string `json:"url" bson:"url"`
 	Count int64  `json:"-" bson:"count"`
 }
-
-type Operation struct {
-	Result string `json:"result"`
-}

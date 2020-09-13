@@ -3,6 +3,7 @@ package errors
 import "net/http"
 
 type Error struct {
+	Status     string `json:"status"`
 	Message    string `json:"message"`
 	HttpStatus int    `json:"http_status"`
 }
@@ -30,6 +31,7 @@ func NewInternalServerError() Error {
 
 func ErrResponse(err Error) *Error {
 	return &Error{
+		Status:     "error",
 		Message:    err.Message,
 		HttpStatus: err.HttpStatus,
 	}
