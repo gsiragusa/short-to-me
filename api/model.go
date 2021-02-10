@@ -11,4 +11,3 @@ type ResponseCount struct {
 	Operation string `json:"operation"`
 	Count     int64  `json:"count"`
 }
-

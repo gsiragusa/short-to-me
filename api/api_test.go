@@ -132,7 +132,7 @@ func TestAPI_CountRedirects(t *testing.T) {
 func TestAPI_Redirect(t *testing.T) {
 	api, svc := MakeTestApi(t)
 
-	req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/123"), nil)
+	req := httptest.NewRequest(http.MethodGet, "/123", nil)
 	req = mux.SetURLVars(req, map[string]string{"shortId": "123"})
 
 	svc.EXPECT().IncrementRedirect(req.Context(), "123")

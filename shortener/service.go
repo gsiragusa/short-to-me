@@ -17,10 +17,10 @@ type service struct {
 	store  Store
 }
 
-func NewService(le *logrus.Logger, config *config.AppConfig, store Store) Service {
+func NewService(le *logrus.Logger, appConfig *config.AppConfig, store Store) Service {
 	return &service{
 		le:     le,
-		config: config,
+		config: appConfig,
 		store:  store,
 	}
 }

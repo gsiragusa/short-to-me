@@ -19,11 +19,11 @@ type Handler interface {
 	GetRoutes() []RouteConfig
 }
 
-func New(le *logrus.Logger, config *config.AppConfig, routes ...Handler) *Server {
+func New(le *logrus.Logger, appConfig *config.AppConfig, routes ...Handler) *Server {
 	parsedRoutes := parseHandlers(routes)
 	return &Server{
 		le:     le,
-		config: config,
+		config: appConfig,
 		router: NewRouter(parsedRoutes...),
 	}
 }

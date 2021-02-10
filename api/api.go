@@ -326,7 +326,7 @@ func (api *API) redirect(w http.ResponseWriter, r *http.Request) error {
 		return server.WriteError(w, errors.NewErrorNotFound())
 	}
 
-	http.Redirect(w, r, url, 301)
+	http.Redirect(w, r, url, http.StatusMovedPermanently)
 	return nil
 }
 

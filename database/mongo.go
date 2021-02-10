@@ -18,9 +18,9 @@ type Client struct {
 	config *config.AppConfig
 }
 
-func NewMongoClient(config *config.AppConfig) (*Client, error) {
+func NewMongoClient(appConfig *config.AppConfig) (*Client, error) {
 	// connect to MongoDB
-	clientOptions := options.Client().ApplyURI(config.MongoUri)
+	clientOptions := options.Client().ApplyURI(appConfig.MongoUri)
 	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		return nil, err
@@ -34,8 +34,8 @@ func NewMongoClient(config *config.AppConfig) (*Client, error) {
 
 	return &Client{
 		mc:     client,
-		config: config,
-		db:     client.Database(config.MongoDbName),
+		config: appConfig,
+		db:     client.Database(appConfig.MongoDbName),
 	}, nil
 }
 
